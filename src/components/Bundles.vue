@@ -1,4 +1,38 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import {useRouter} from "vue-router";
+
+const router = useRouter();
+
+const showBundleDialog = ref(false)
+const isLoggedIn = localStorage.getItem( "isLoggedIn")
+const selectedBundle = ref(null)
+const selectedPrice = ref(null)
+
+function showBundle(name, price){
+  if(isLoggedIn){
+    selectedBundle.value = name
+    selectedPrice.value = price
+    showBundleDialog.value = true
+    
+  }else{
+    router.push('/login')
+   }
+  }
+
+  function subscribe(){
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    userDetails.subscription = {
+      name: selectedBundle.value,
+      price: selectedPrice.value
+    }
+    localStorage.setItem('userDetails', JSON.stringify(userDetails))
+    showBundleDialog.value = false
+  }
+
+</script>
+
+
 
 <template>
   <v-container style="background-color: #A8BA9A" max-width="100%">
@@ -7,6 +41,9 @@
     <v-row justify="center">
       <v-col cols="12" class="text-center">
         <div class="text-display-medium mb-12">Bundles and Pricing</div>
+        <v-row>
+          <div class="text-label-medium font-italic">Click on a bundle to subscribe</div>
+        </v-row>
       </v-col>
     </v-row>
 
@@ -15,7 +52,7 @@
 
       <!-- Daily Pass -->
       <v-col md="3">
-        <v-card class="text-center pa-4" >
+        <v-card class="text-center " @click="showBundle('Daily Pass', 500)">
           <v-icon color="#3A4B68" icon="mdi-arm-flex" size="large" class="mt-8"></v-icon>
           <v-card-title style="color:#3A4B68">Daily Pass</v-card-title>
           <v-card-text>
@@ -27,7 +64,7 @@
 
       <!-- Monthly Pass -->
       <v-col md="3">
-        <v-card class="text-center pa-4">
+        <v-card class="text-center " @click="showBundle('Monthly Pass', 15000)">
           <v-icon color="#3A4B68" icon="mdi-arm-flex" size="large" class="mt-8"></v-icon>
           <v-card-title style="color:#3A4B68">Monthly Pass</v-card-title>
           <v-card-text>
@@ -39,7 +76,7 @@
 
       <!-- Quarterly Pass -->
       <v-col md="3">
-        <v-card class="text-center pa-4" >
+        <v-card class="text-center " @click="showBundle('Quarterly Pass', 45000)">
           <v-icon color="#3A4B68" icon="mdi-arm-flex" size="large" class="mt-8"></v-icon>
           <v-card-title style="color:#3A4B68">Quarterly Pass</v-card-title>
           <v-card-text>
@@ -51,7 +88,7 @@
 
       <!-- Half-Yearly Pass -->
       <v-col md="3">
-        <v-card class="text-center pa-4" >
+        <v-card class="text-center " @click="showBundle('Half-Yearly Pass', 90000)">
           <v-icon color="#3A4B68" icon="mdi-arm-flex" size="large" class="mt-8"></v-icon>
           <v-card-title style="color:#3A4B68">Half-Yearly Pass</v-card-title>
           <v-card-text>
@@ -63,7 +100,7 @@
 
       <!-- Yearly Pass -->
       <v-col md="12">
-        <v-card class="text-center pa-4">
+        <v-card class="text-center " @click="showBundle('Yearly Pass', 180000)">
           <v-icon color="#3A4B68" icon="mdi-dumbbell" size="large" class="mt-8"></v-icon>
           <v-card-title style="color:#3A4B68">Yearly Pass</v-card-title>
           <v-card-text>
@@ -143,4 +180,22 @@
         </v-list>
       </v-row>
      </v-container>
+
+     <!--Dialog-->
+       <v-dialog v-model="showBundleDialog" max-width="600" >
+
+      <v-card prepend-icon="mdi-account" title="Subscribe to Bundle" >
+        <v-card-text>
+          You are about to subscribe to {{ selectedBundle }} at {{ selectedPrice }}. Click on the button below to complete payment
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+         <v-spacer></v-spacer>
+          <v-btn text="Close" variant="plain" @click="showBundleDialog = false" ></v-btn>
+          <v-btn color="primary" variant="tonal" @click="subscribe()" >Subscribe</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>

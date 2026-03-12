@@ -1,6 +1,9 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
+import App from './App.vue'
+import router from './router'
+
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
@@ -10,7 +13,6 @@ import '@mdi/font/css/materialdesignicons.css'
 import * as labsComponents from 'vuetify/labs/components'
 
 // Components
-import App from './App.vue'
 
 const vuetify = createVuetify({
   components: {
@@ -23,11 +25,16 @@ const vuetify = createVuetify({
   },
   theme:{
     defaultTheme: 'light',
+    themes:{
+      light:{
+        colors:{
+          primary: '#3A4B68',
+          secondary: '#1FD204',
+        }
+      }
+    }
   }
 })
-
-
-import router from './router'
 
 const app = createApp(App)
 
