@@ -16,9 +16,9 @@ const isAdmin = true
         <v-app-bar-title>
             <router-link to="/">MacFit</router-link>
         </v-app-bar-title>
-        <v-btn to="/homepage" v-if="isLoggedIn">Home</v-btn>
+        <v-btn to="/home" v-if="isLoggedIn">Home</v-btn>
         <v-btn to="/bundles">Bundles</v-btn>
-        <v-btn to="/gym_locations">Our Gyms</v-btn>
+        <v-btn to="/gym-locations">Our Gyms</v-btn>
         <v-btn to="/admin" v-if="isAdmin">Admin</v-btn>
           <v-btn icon="mdi-account" v-if="isLoggedIn">P
             <v-menu activator="parent">
