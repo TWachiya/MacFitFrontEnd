@@ -1,5 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from "vue-router";
+import { useAuth } from '../services/auth'
+
+const router = useRouter();
+const { register, loading, error } = useAuth()
 
   const rules = {
     required: value => !!value || 'Required.',
@@ -24,27 +29,35 @@ import { ref } from 'vue'
   const dateOfBirth = ref(null)
   const gymLocation = ref(null)
 
-function signUp(){
-  //create user object
+const signUp = async () => {
 
-  const userDetails={
-    name: firstName.value +lastName.value,
-    email: email.value,
-    phoneNumber: phoneNumber.value,
-    gender: gender.value,
-    dateOfBirth: dateOfBirth.value,
-    gymLocation: gymLocation.value,
-    password: password.value,
-  }
-  //store this data
-try{
-    localStorage.setItem('userDetails', JSON.stringify(userDetails))  
-}catch(err){
-    console.error('Sign up process failed', err)
-}
-}
+    loading.value = true;
+    error.value = "";
+
+    const formData = new FormData();
+    formData.append("name", firstName.value +' '+ lastName.value,);
+    formData.append("email", email.value);
+    formData.append("phoneNumber", phoneNumber.value);
+    formData.append("dob", dateOfBirth.value);
+    formData.append("gender", gender.value);
+    formData.append("gymLocation", gymLocation.value);
+    formData.append("password", password.value);
+    formData.append("role_id", 4);
+
+    try {
+        await register(formData)
+    
+        // Redirect after successful signup
+        router.push('/homepage').then(() => {
+            router.go(0); // Reloads the current route
+        });
+    } catch (err) {
+        // Error is already handled by the auth service
+        console.error('Sign up failed', err)
+    }
+};
+
 </script>
-
 
 <template>
 <v-container width="50%" class="text-center mt-12" style="background: #CFD0D6" >

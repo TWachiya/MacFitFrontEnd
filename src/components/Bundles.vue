@@ -5,7 +5,7 @@ import {useRouter} from "vue-router";
 const router = useRouter();
 
 const showBundleDialog = ref(false)
-const isLoggedIn = localStorage.getItem( "isLoggedIn")
+const isLoggedIn = localStorage.getItem( "authToken")
 const selectedBundle = ref(null)
 const selectedPrice = ref(null)
 
@@ -21,7 +21,7 @@ function showBundle(name, price){
   }
 
   function subscribe(){
-    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    const userDetails = JSON.parse(localStorage.getItem('user'))
     userDetails.subscription = {
       name: selectedBundle.value,
       price: selectedPrice.value
